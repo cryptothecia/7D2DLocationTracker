@@ -1,0 +1,1 @@
+This is a small module that uses the 7 Days to Die Dedicated Server web API to check if players on the server are inside a specified location and send commands to the server. This can be used to do things like constantly monitor player positions and have commands automatically sent to the server in reaction to those positions. 
