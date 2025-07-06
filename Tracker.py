@@ -2,7 +2,6 @@ import requests
 import os
 from math import dist
 from dotenv import load_dotenv
-from time import sleep
 
 load_dotenv()
 TOKEN_NAME = os.getenv('TOKEN_NAME')
