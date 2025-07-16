@@ -25,7 +25,7 @@ class Player:
         self.health = player_data['health']
         self.stamina = player_data['stamina']
         self.deaths = player_data['deaths']
-        self.kills = player_data['kills']['zombies']
+        self.Zkills = player_data['kills']['zombies']
 
 class Location:
     def __init__(self,minX:float,maxX:float,minY:float,maxY:float,minZ:float,maxZ:float,name:str=""):
@@ -49,6 +49,15 @@ class Location:
             print(f"{player.name} is {distance:.2f} units from {self.name}")
         return { "inside" : inside, "distance" : distance }
 
+# To be used with the data from gameprefs or gamestats
+class GameData:
+    def __init__(self,data:list):
+        self.data = data
+    def get(self,search_str:str):
+        query = next((item for item in self.data if item['name'] == search_str), None)
+        if query is not None:
+            return query['value']
+
 def get_players():
     url = WEB_URL + '/player'
     response = requests.get(url, headers=headers)
@@ -61,6 +70,36 @@ def get_players():
     else:
         print(response.status_code)
         return None
+
+def get_game_prefs():
+    url = WEB_URL + "/gameprefs"
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        data = (response.json())['data']
+        return data
+    else:
+        print(response.status_code)
+        return None
+    
+def get_game_stats():
+    url = WEB_URL + "/gamestats"
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        data = (response.json())['data']
+        return data
+    else:
+        print(response.status_code)
+        return None
+    
+def get_server_stats():
+    url = WEB_URL + "/serverstats"
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        data = (response.json())['data']
+        return data
+    else:
+        print(response.status_code)
+        return None    
     
 def send_command(command:str):
     url = WEB_URL + '/command'
