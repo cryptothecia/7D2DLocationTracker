@@ -58,9 +58,16 @@ class GameData:
         if query is not None:
             return query['value']
 
+def request(url:str,headers:dict[str]):
+    try:
+        response = requests.get(url, headers=headers)
+    except: 
+        response = None
+    return response
+
 def get_players():
     url = WEB_URL + '/player'
-    response = requests.get(url, headers=headers)
+    response = request(url, headers=headers)
     if response.status_code == 200:
         data = (response.json())['data']['players']
         players = []
@@ -73,7 +80,7 @@ def get_players():
 
 def get_game_prefs():
     url = WEB_URL + "/gameprefs"
-    response = requests.get(url, headers=headers)
+    response = request(url, headers=headers)
     if response.status_code == 200:
         data = (response.json())['data']
         return data
@@ -83,7 +90,7 @@ def get_game_prefs():
     
 def get_game_stats():
     url = WEB_URL + "/gamestats"
-    response = requests.get(url, headers=headers)
+    response = request(url, headers=headers)
     if response.status_code == 200:
         data = (response.json())['data']
         return data
@@ -93,7 +100,7 @@ def get_game_stats():
     
 def get_server_stats():
     url = WEB_URL + "/serverstats"
-    response = requests.get(url, headers=headers)
+    response = request(url, headers=headers)
     if response.status_code == 200:
         data = (response.json())['data']
         return data
