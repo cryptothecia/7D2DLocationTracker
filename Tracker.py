@@ -54,59 +54,51 @@ class GameData:
     def __init__(self,data:list):
         self.data = data
     def get(self,search_str:str):
-        query = next((item for item in self.data if item['name'] == search_str), None)
+        if self.data is not None:
+            query = next((item for item in self.data if item['name'] == search_str), None)
+        else: 
+            return None
         if query is not None:
             return query['value']
 
-def request(url:str,headers:dict[str]):
+def send_request(url:str,headers:dict[str]=headers):
     try:
         response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            data = (response.json())['data']
+            return data
+        else:
+            print(response.status_code)
+            return None
     except: 
-        response = None
-    return response
+        return None
 
 def get_players():
     url = WEB_URL + '/player'
-    response = request(url, headers=headers)
-    if response.status_code == 200:
-        data = (response.json())['data']['players']
+    data = send_request(url, headers=headers)
+    if data is not None:
+        data = data['players']
         players = []
         for player in data:
             players.append(Player(player))
         return players
     else:
-        print(response.status_code)
         return None
 
 def get_game_prefs():
     url = WEB_URL + "/gameprefs"
-    response = request(url, headers=headers)
-    if response.status_code == 200:
-        data = (response.json())['data']
-        return data
-    else:
-        print(response.status_code)
-        return None
+    data = send_request(url, headers=headers)
+    return data
     
 def get_game_stats():
     url = WEB_URL + "/gamestats"
-    response = request(url, headers=headers)
-    if response.status_code == 200:
-        data = (response.json())['data']
-        return data
-    else:
-        print(response.status_code)
-        return None
+    data = send_request(url, headers=headers)
+    return data
     
 def get_server_stats():
     url = WEB_URL + "/serverstats"
-    response = request(url, headers=headers)
-    if response.status_code == 200:
-        data = (response.json())['data']
-        return data
-    else:
-        print(response.status_code)
-        return None    
+    data = send_request(url, headers=headers)
+    return data 
     
 def send_command(command:str):
     url = WEB_URL + '/command'
